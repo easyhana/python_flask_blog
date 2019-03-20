@@ -38,11 +38,47 @@ def login_views():
             return render_template('login.html')
 
 
-
 @users.route('/register')
 def register_views():
     return render_template('register.html')
 
+@users.route('/logout')
+def logout_views():
+    #获取请求源地址
+    url = request.headers.get('Referer','/')
+    #判断session中是否有登录信息,如果有则删除
+    if 'id' in session and 'loginname' in session:
+        del session['id']
+        del session['loginname']
+    #重定向到源地址
+    return redirect(url)
+
+
 @users.route('/list')
 def list_views():
     pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -48,7 +48,7 @@
         <li><a href="time.html">时间轴</a> </li>
         <li><a href="gbook.html">留言</a> </li>
         <li><a href="about.html">关于我</a> </li>
-        <li><a href="release.html">发表博客</a></li>
+        <li><a href="/release">发表博客</a></li>
       </nav>
     </div>
     {% if not params.user %}
@@ -92,10 +92,16 @@
     <div class="picsbox">
       <div class="banner">
         <div id="banner" class="fader">
-          <li class="slide"><a href="info.html" target="_blank"><img src="/static/images/banner01.jpg"><span class="imginfo">爬虫微课5小时
-                python学习路线!</span></a></li>
-          <li class="slide"><a href="info.html" target="_blank"><img src="/static/images/banner02.jpg"><span class="imginfo">干货|如何优雅的在手机上进行Python编程</span></a></li>
-          <li class="slide"><a href="info.html" target="_blank"><img src="/static/images/banner03.jpg"><span class="imginfo">python-win10下使用定时任务执行程序</span></a></li>
+          {% for topic in params.topics[0:3] %}
+          <li class="slide">
+              <a href="/info?id={{ topic.id }}" target="_blank">
+                  <img src="/static/{{ topic.images }}">
+                  <span class="imginfo">
+                      {{ topic.title }}
+                  </span>
+              </a>
+          </li>
+          {% endfor %}
           <div class="fader_controls">
             <div class="page prev" data-target="prev">&lsaquo;</div>
             <div class="page next" data-target="next">&rsaquo;</div>
@@ -120,21 +126,37 @@
     {% endblock %}
     <!--blogsbox begin-->
     <div class="blogsbox">
+      {% for topic in params.topics %}
       <div class="blogs" data-scroll-reveal="enter bottom over 1s">
-        <h3 class="blogtitle"><a href="info.html" target="_blank">Python语言在人工智能(AI)中的优势 </a></h3>
-        <span class="blogpic"><a href="info.html" title=""><img src="/static/images/toppic01.jpg" alt=""></a></span>
-        <p class="blogtext">本文探讨了Python语言在AI领域的优势与运用。 谁会成为AI 和大数据时代的第一开发语言? 这本已是一个不需要争论的问题。如果说三年前,Matlab、Scala、R、Java
-          ...</p>
+        <h3 class="blogtitle">
+            <a href="/info?id={{ topic.id }}" target="_blank">{{ topic.title }} </a>
+        </h3>
+        {% if topic.images %}
+        <span
+            {% if loop.index % 2 == 0 %}
+                class="blogpic"
+            {% else %}
+                class="bigpic"
+            {% endif %}
+        >
+            <a href="/info?id={{ topic.id }}" title="">
+                <img src="/static/{{ topic.images }}" alt="">
+            </a>
+        </span>
+        {% endif %}
+        <p class="blogtext">{{ topic.content|truncate(200) }}</p>
         <div class="bloginfo">
           <ul>
-            <li class="author"><a href="info.html">皮皮璐</a></li>
-            <li class="lmname"><a href="info.html">学无止境</a></li>
-            <li class="timer">2018-5-13</li>
-            <li class="view"><span>34567</span>已阅读</li>
-            <li class="like">9999</li>
+            <li class="author"><a href="info.html">{{ topic.user.uname }}</a></li>
+            <li class="lmname"><a href="info.html">{{ topic.category.cate_name }}</a></li>
+            <li class="timer">{{ topic.pub_date.strftime("%Y-%m-%d") }}</li>
+            <li class="view"><span>{{ topic.read_num }}</span>已阅读</li>
+            <li class="like">{{ topic.voke_users.count() }}</li>
           </ul>
         </div>
       </div>
+      {% endfor %}
+      <!--
       <div class="blogs" data-scroll-reveal="enter bottom over 1s">
         <h3 class="blogtitle"><a href="info.html" target="_blank">python中打开TXT文件报错 </a></h3>
         <p class="blogtext">python中打开TXT文件报错2017年03月09日 14:30:57 阅读数:676 在IDLE命令行引用一文件夹下的函数,来了条错误提示:FileNotFoundError:
@@ -406,6 +428,7 @@
           </ul>
         </div>
       </div>
+      -->
     </div>
     <!--blogsbox end-->
     <div class="sidebar">

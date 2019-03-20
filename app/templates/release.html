@@ -76,7 +76,7 @@
 			<p class="n1">表发博客</p>
 		</h1>
 		<div class="infosbox">
-			<form action="#" method="post">
+			<form action="/release" method="post" enctype="multipart/form-data">
 				<br>
 				<p>
 					<input class="comment_input" id="author" maxlength="50" name="author" required="required" size="25" tabindex="1"
@@ -85,15 +85,34 @@
 				</p>
 				<br>
 				<p class="classification">
+                    <!--
 					<input name="list" type="radio" value="1">个人博客
 					<input name="list" type="radio" value="2">公开博客
 					<input name="list" type="radio" value="3">其他博客
+					-->
+                    {% for type in blogTypes %}
+                        <input type="radio" name="list" value="{{ type.id }}">{{ type.type_name }}
+                    {% endfor %}
 				</p>
 
 				<br>
 
-				<div id="editor" style="margin-left: 12px;margin-right: 12px"></div>
+                <select name="category">
+                    {% for cate in categories %}
+                        <option value="{{ cate.id }}">{{ cate.cate_name }}</option>
+                    {% endfor %}
+                </select>
+
+                <p>
+                    <input type="file" name="picture">
+                </p>
+
+                <p>
+				<textarea name="content" cols="80" rows="10"></textarea>
+                </p>
+
 				<br>
+
 				<p>
 					<input id="id_article" name="article" type="hidden" value="1">
 					<input name="submit" type="submit" id="submit" tabindex="5" value="提交" class="button" />
